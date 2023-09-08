@@ -9,7 +9,8 @@
 
 <body>
   <script type="module">
-    import PromiseA from './index.js'
+    // import PromiseA from './index.js'
+    import PromiseA from './my-promise.js'
     // function other() {
     //   return new PromiseA((resolve, reject) => {
     //     resolve('other')
@@ -69,17 +70,25 @@
     //   console.log("微任务3")
     // })
     // console.log("script 宏任务")
-    const promise = new Promise((resolve, rject) => {
-      setTimeout(() => {
-        resolve("初始化")
-      }, 1000 * 8);
+    // const promise = new Promise((resolve, rject) => {
+    //   setTimeout(() => {
+    //     resolve("初始化")
+    //   }, 1000 * 8);
+    // })
+    // promise.then((res) => {
+    //   console.log('第一个 resolve', res)
+    //   return Promise.reject("错误")
+    // }, (res) => {
+    //   console.log('第一个 reject', res)
+    // }).then(() => { console.log("第二个 resolve") }, () => { console.log("第二个 reject"); ddd.dd(); return Promise.resolve("ok") }).then((res) => { console.log("第三个 resolve", res) }, (err) => { console.log("第三个 reject", err) })
+    const promise1=new PromiseA((resolve,reject)=>{
+      resolve(1)
     })
-    promise.then((res) => {
-      console.log('第一个 resolve', res)
-      return Promise.reject("错误")
-    }, (res) => {
-      console.log('第一个 reject', res)
-    }).then(() => { console.log("第二个 resolve") }, () => { console.log("第二个 reject"); ddd.dd();  return Promise.resolve("ok") }).then((res) => { console.log("第三个 resolve" ,res) }, (err) => { console.log("第三个 reject",err) })
+    const promise2=new PromiseA((resolve,reject)=>{
+      resolve(10)
+    })
+    promise1.then(res => { console.log('第一次'); return 2 }).then((res) => { console.log('第二次') })
+    promise2.then(res => { console.log('第三次'); return 20 }).then((res) => { console.log('第思次') })
   </script>
 </body>
 
