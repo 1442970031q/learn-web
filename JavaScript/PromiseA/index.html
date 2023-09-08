@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实现 promise A 规范</title>
+</head>
+
+<body>
+  <script type="module">
+    import PromiseA from './index.js'
+    // function other() {
+    //   return new PromiseA((resolve, reject) => {
+    //     resolve('other')
+    //   })
+    // }
+    // const promise = new PromiseA((resolve, reject) => {
+    //   console.log(resolve)
+    //   resolve("初始化")
+    // })
+    // promise.then(value => {
+    //   console.log(1)
+    //   console.log('resolve', value)
+    //   return other()
+    // }).then(value => {
+    //   console.log(2)
+    //   console.log('resolve', value)
+    // })
+    // queueMicrotask(() => {
+    //   console.log("queueMickrotask")
+    // })
+
+    // const promise = new PromiseA((resolve, reject) => {
+    //   resolve(100)
+    // })
+    // // 这个时候将promise定义一个p1，然后返回的时候返回p1这个promise
+    // const p1 = promise.then(value => {
+    //   console.log(1)
+    //   console.log('resolve', value)
+    //   return '返回'
+    // })
+
+    // // 运行的时候会走reject
+    // p1.then(value => {
+    //   console.log(2)
+    //   console.log('resolve', value)
+    // }, reason => {
+    //   console.log(3)
+    //   console.log(reason.message)
+    // })
+
+    // setTimeout(() => {
+    //   console.log("settimeout 宏任务")
+    //   setTimeout(() => {
+    //     console.log("settimeout 宏任务2")
+    //   })
+    //   queueMicrotask(() => {
+    //     console.log("微任务4")
+    //   })
+    // });
+    // queueMicrotask(() => {
+    //   console.log("微任务1")
+    // })
+    // queueMicrotask(() => {
+    //   console.log("微任务2")
+    // })
+    // queueMicrotask(() => {
+    //   console.log("微任务3")
+    // })
+    // console.log("script 宏任务")
+    const promise = new Promise((resolve, rject) => {
+      setTimeout(() => {
+        resolve("初始化")
+      }, 1000 * 8);
+    })
+    promise.then((res) => {
+      console.log('第一个 resolve', res)
+      return Promise.reject("错误")
+    }, (res) => {
+      console.log('第一个 reject', res)
+    }).then(() => { console.log("第二个 resolve") }, () => { console.log("第二个 reject"); ddd.dd();  return Promise.resolve("ok") }).then((res) => { console.log("第三个 resolve" ,res) }, (err) => { console.log("第三个 reject",err) })
+  </script>
+</body>
+
+</html>
