@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>虚拟列表</title>
+    <!-- React -->
+    <script src="https://unpkg.com/react@latest/umd/react.development.js"></script>
+    <!-- ReactDOM -->
+    <script src="https://unpkg.com/react-dom@latest/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- PropTypes 限制参数类型-->
+    <script src="https://unpkg.com/prop-types@latest/prop-types.js"></script>
+    <style>
+        .lists {
+            width: 200px;
+            height: 150px;
+            background: skyblue;
+            overflow: auto;
+        }
+
+        .lists .new {
+            height: 30px;
+        }
+
+        .VList {
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .phantomContent {
+            position: relative;
+        }
+
+        .Card {
+            background: rgb(226, 224, 224);
+            padding: 16px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="example"></div>
+    <script type="text/babel">
+
+        class Card extends React.Component {
+            contentText;
+            constructor(props) {
+                super(props)
+                //parseInt(Math.random() * 100, 10)
+                this.contentText = new Array(parseInt(Math.random() * 30, 10)).fill("测试测试测试").join(",")
+            }
+            render() {
+                return <div id={this?.props?.id} style={this?.props?.style} className="Card">
+                    {this.contentText}
+                </div>
+            }
+        }
+
+        class VList extends React.Component {
+            state = { scrollTop: 0 }
+            height = this?.props?.height
+            total = this?.props?.total
+            rowHeight = this?.props?.rowHeight
+            renderRowCard = this?.props?.renderRowCard
+            startIndex = 0
+            limit = Math.ceil(this.height / this.rowHeight)
+            endIndex = Math.min(this.startIndex + this.limit, this.total - 1)
+            phantomHeight = this.total * this.rowHeight
+            renderDisplayRowCard = () => {
+                const { rowHeight, startIndex, endIndex, renderRowCard } = this
+                const content = []
+                for (let i = startIndex; i <= endIndex; i++) {
+                    content.push(renderRowCard(i, {
+                        position: 'absolute',
+                        top: i * rowHeight,
+                        height: rowHeight,
+                        width: "100%"
+                    }))
+                }
+                return content
+            }
+            vListScroll = (e) => {
+                const { scrollTop } = e?.target || {}
+                const { rowHeight, startIndex, limit, total } = this
+                const curIndex = Math.floor(scrollTop / rowHeight)
+                if (startIndex !== curIndex) {
+                    this.startIndex = curIndex
+                    this.endIndex = Math.ceil(curIndex + limit, total - 1)
+                    this.setState({ scrollTop })
+                }
+            }
+            render() {
+                const { phantomHeight, height, rowHeight, total } = this
+                return <div onScroll={this.vListScroll} className="VList" style={{
+                    height: `${height}px`
+                }}>
+                    <div ref={this.phantomRef} className="phantomContent"
+                        style={{
+                            height: `${phantomHeight}px`
+                        }}
+                    >
+                        {this.renderDisplayRowCard()}
+                    </div>
+                </div>
+            }
+        }
+
+        class App extends React.Component {
+            render() {
+                return (
+                    <div>
+                        <VList height={1000} rowHeight={90} total={1000} renderRowCard={(index, style) => {
+                            return <Card id={index} style={style} />
+                        }} />
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('example')
+        );
+    </script>
+
+</body>
+
+</html>

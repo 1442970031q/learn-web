@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>index 做key 乱序问题</title>
+    <!-- React -->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+    <!-- ReactDOM -->
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+    <!-- PropTypes 限制参数类型-->
+    <script src="https://unpkg.com/prop-types@15.6/prop-types.js"></script>
+    <style>
+        .lists {
+            width: 200px;
+            height: 150px;
+            background: skyblue;
+            overflow: auto;
+        }
+
+        .lists .new {
+            height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="example"></div>
+    <script type="text/babel">
+
+        class Persons extends React.Component {
+            state = {
+                list: [{ id: '1', name: '张三', age: 18 }, { id: '2', name: '李四', age: 19 }]
+            }
+            add = () => {
+                const { list } = this.state
+                this.setState({
+                    list: [{ id: '3', name: '王武', age: 20 }, ...list]
+                })
+            }
+            render() {
+                const { list } = this.state
+                return (
+                    <div>
+                        <button onClick={this.add}>添加人员</button>
+                        <h1>index作为key</h1>
+                        <ul>
+                            {
+                                list.map((item, index) => <li key={index}>{item.name}--{item.age} <input defaultValue={item.name} />
+                                    <button onClick={() => {
+                                        this.setState({
+                                            list: list.filter((_, ind) => ind !== index)
+                                        })
+                                    }}>删除</button>
+                                </li>)
+                            }
+                        </ul>
+                        <h1>id作为key</h1>
+                        <ul>
+                            {
+                                list.map(item => <li key={item.id}>{item.name}--{item.age}<input defaultValue={item.name} /></li>)
+                            }
+                        </ul>
+                    </div>
+                )
+            }
+        }
+
+        class App extends React.Component {
+            render() {
+                return (
+                    <div>
+                        <Persons />
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(
+            <App />,
+            document.getElementById('example')
+        );
+    </script>
+
+</body>
+
+</html>
