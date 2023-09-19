@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>虚拟列表</title>
+    <!-- React -->
+    <script src="https://unpkg.com/react@latest/umd/react.development.js"></script>
+    <!-- ReactDOM -->
+    <script src="https://unpkg.com/react-dom@latest/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- PropTypes 限制参数类型-->
+    <script src="https://unpkg.com/prop-types@latest/prop-types.js"></script>
+    <style>
+        html,
+        body {
+            margin: 0;
+        }
+
+        .VList {
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .VListZW {
+            position: relative;
+        }
+
+        .VListCards {
+            position: absolute;
+            color: #333;
+        }
+
+        .Card {
+            background: rgb(226, 224, 224);
+            padding: 16px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="example"></div>
+    <script type="text/babel">
+        /** 
+         * 触发 setState
+         * 计算 expriationTime
+         * 更新 调和 fiber树
+         * 合并 state执行render
+         * 替换真实 dom
+         * 执行setState({},callback) 后的callback
+         * 
+        */
+
+        class App extends React.Component {
+            // 创建 更新
+            // static getDerivedStateFromProps() {
+            //     console.log('getDerviedStateFromPorps 2')
+            // }
+            state = {
+                num: 0,
+                list: [{ name: '张三' }]
+            }
+
+            // 创建
+            constructor() {
+                super()
+                console.log('constructor 1')
+            }
+
+            // 创建
+            componentDidMount() {
+                console.log('compontentDidMount 4')
+            }
+
+            // 更新
+            // shouldComponentUpdate() {
+            //     console.log("shouldComponentUpdate")
+            // }
+
+            // 更新
+            // getSnapshotBeforeUpdate() {
+            //     console.log("getSnapshotBeforeUpdate")
+            // }
+
+            // 更新
+            componentDidUpdate() {
+                console.log("componentDidUpdate")
+            }
+
+            // 卸载
+            componentWillUnmount() {
+                console.log("componentWillUnmount")
+            }
+            handleClick = () => {
+                // Promise.resolve().then(() => {
+                // setTimeout(() => {
+                    // ReactDOM.unstable_batchedUpdates(() => {
+
+                    // this.setState((v) => ({ num: this.state.num + 1 }), () => { console.log('cb 1', this.state.num) })
+                    // console.log('c1', this.state.num)
+                    // this.setState((v) => ({ num: this.state.num + 1 }), () => { console.log('cb 2', this.state.num) })
+                    // console.log('c2', this.state.num)
+                    // this.setState((v) => ({ num: this.state.num + 1 }), () => { console.log('cb 3', this.state.num) })
+                    // console.log('c3', this.state.num)
+
+                    this.setState({ list: [{ name: '李四' }] }, () => { console.log('cb 1', this.state.list) })
+                    console.log('c1', this.state.list)
+                    this.setState({ list: [{ name: '王武' }] }, () => { console.log('cb 1', this.state.list) })
+                    console.log('c2', this.state.list)
+                    this.setState({ list: [{ name: '找六' }] }, () => { console.log('cb 1', this.state.list) })
+                    console.log('c3', this.state.list)
+                    // })
+                // });
+                // })
+
+
+            }
+            // 创建 更新
+            render() {
+                const { setState, state } = this
+                const jsxEle = (
+                    <div>
+                        <button onClick={this.handleClick}>更新</button>
+                        <h1> {state.num}</h1>
+                        <ul>
+                            {state.list.map((v, i) => <li key={i}>{v.name}</li>)}
+                        </ul>
+                    </div>
+                )
+                return jsxEle
+            }
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('example')
+        );
+    </script>
+
+</body>
+
+</html>

@@ -12,15 +12,9 @@
     <!-- PropTypes 限制参数类型-->
     <script src="https://unpkg.com/prop-types@latest/prop-types.js"></script>
     <style>
-        .lists {
-            width: 200px;
-            height: 150px;
-            background: skyblue;
-            overflow: auto;
-        }
-
-        .lists .new {
-            height: 30px;
+        html,
+        body {
+            margin: 0;
         }
 
         .VList {
@@ -28,8 +22,13 @@
             overflow-y: auto;
         }
 
-        .phantomContent {
+        .VListZW {
             position: relative;
+        }
+
+        .VListCards {
+            position: absolute;
+            color: #333;
         }
 
         .Card {
@@ -49,8 +48,7 @@
             contentText;
             constructor(props) {
                 super(props)
-                //parseInt(Math.random() * 100, 10)
-                this.contentText = new Array(parseInt(Math.random() * 30, 10)).fill("测试测试测试").join(",")
+                this.contentText = new Array(parseInt(Math.random() * 100, 10)).fill("测试测试测试").join(",")
             }
             render() {
                 return <div id={this?.props?.id} style={this?.props?.style} className="Card">
@@ -60,50 +58,47 @@
         }
 
         class VList extends React.Component {
-            state = { scrollTop: 0 }
-            height = this?.props?.height
-            total = this?.props?.total
-            rowHeight = this?.props?.rowHeight
-            renderRowCard = this?.props?.renderRowCard
+            height = this?.props?.height || window.document.body;
+            total = this?.props?.total || 0;
+            cardTempHeight = this?.props?.cardTempHeight || 0;
+            zwHeight = this.total * this.cardTempHeight
+            cardPonstions = []
+            limit=this.he
             startIndex = 0
-            limit = Math.ceil(this.height / this.rowHeight)
-            endIndex = Math.min(this.startIndex + this.limit, this.total - 1)
-            phantomHeight = this.total * this.rowHeight
-            renderDisplayRowCard = () => {
-                const { rowHeight, startIndex, endIndex, renderRowCard } = this
-                const content = []
-                for (let i = startIndex; i <= endIndex; i++) {
-                    content.push(renderRowCard(i, {
-                        position: 'absolute',
-                        top: i * rowHeight,
-                        height: rowHeight,
-                        width: "100%"
-                    }))
-                }
-                return content
+            endIndex = this.limit + this.buffSize
+            constructor(props) {
+                super(props)
+                this.initCardPonstion()
             }
-            vListScroll = (e) => {
-                const { scrollTop } = e?.target || {}
-                const { rowHeight, startIndex, limit, total } = this
-                const curIndex = Math.floor(scrollTop / rowHeight)
-                if (startIndex !== curIndex) {
-                    this.startIndex = curIndex
-                    this.endIndex = Math.ceil(curIndex + limit, total - 1)
-                    this.setState({ scrollTop })
+            initCardPonstion = () => {
+                const { total, cardTempHeight } = this
+                this.cardPonstions[0] = {
+                    id: 0,
+                    top: 0,
+                    bottom: cardTempHeight
                 }
+                for (let i = 1; i < total; i++) {
+                    const upNodePonstion = this.cardPonstions[i - 1]
+                    this.cardPonstions[i] = {
+                        id: i,
+                        top: upNodePonstion?.bottom,
+                        bottom: cardTempHeight * i
+                    }
+                }
+            }
+            componentDidMount() {
+
             }
             render() {
-                const { phantomHeight, height, rowHeight, total } = this
-                return <div onScroll={this.vListScroll} className="VList" style={{
-                    height: `${height}px`
+                const { height } = this
+                return <div className="VList" style={{
+                    height
                 }}>
-                    <div ref={this.phantomRef} className="phantomContent"
-                        style={{
-                            height: `${phantomHeight}px`
-                        }}
-                    >
-                        {this.renderDisplayRowCard()}
-                    </div>
+                    <div className="VListZW" style={{
+                        height: `${this.zwHeight}px`,
+                        background: '#ccc'
+                    }}></div>
+                    <div className="VListCards">card list</div>
                 </div>
             }
         }
@@ -112,9 +107,7 @@
             render() {
                 return (
                     <div>
-                        <VList height={1000} rowHeight={90} total={1000} renderRowCard={(index, style) => {
-                            return <Card id={index} style={style} />
-                        }} />
+                        <VList />
                     </div>
                 )
             }
