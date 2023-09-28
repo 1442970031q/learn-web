@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>state 的相关api 和使用场景</title>
+    <!-- React -->
+    <script src="https://unpkg.com/react@latest/umd/react.development.js"></script>
+    <!-- ReactDOM -->
+    <script src="https://unpkg.com/react-dom@latest/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- PropTypes 限制参数类型-->
+    <script src="https://unpkg.com/prop-types@latest/prop-types.js"></script>
+    <style>
+        html,
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="example"></div>
+    <script type="text/babel">
+
+        /**
+         * 相关单词
+   
+        */
+        /**
+         * 相关api 
+      
+         * 
+        */
+        class Form extends React.Component {
+            state = {
+                formData: {}
+            }
+            submitForm = (cb) => {
+                cb?.(this.state.formData)
+            }
+            resetFrom = () => {
+                const { formData } = this.state
+                Object.keys(formData).forEach((k) => {
+                    formData[k] = ''
+                })
+                this.setState({
+                    formData
+                })
+            }
+            setValue = (name, val) => {
+                const { formData } = this.state
+                this.setState({
+                    formData: {
+                        ...formData,
+                        [name]: val
+                    }
+                })
+            }
+            render() {
+                const { children } = this.props
+                const renderChildren = []
+                React.Children.forEach(children, (child) => {
+                    if (children.type.displayName === 'formItem') {
+                        const { name } = child.props
+                        const Child = React.cloneElement(child, {
+                            key: name,
+                            handleChange: this.setValue,           /* 用于改变 value */
+                            value: this.state.formData[name] || ''
+                        }, child.props.children)
+                        renderChildren.push(Child)
+                    }
+                })
+                console.log()
+                return renderChildren
+            }
+        }
+        function FormItem(props) {
+            const { children, name, handleChange, value, label } = props
+            const onChange = (value) => {
+                /* 通知上一次value 已经改变 */
+                handleChange(name, value)
+            }
+            return <div className='form' >
+                <span className="label" >{label}:</span>
+                {
+                    React.isValidElement(children) && children.type.displayName === 'input'
+                        ? React.cloneElement(children, { onChange, value })
+                        : null
+                }
+            </div>
+        }
+        FormItem.displayName = 'formItem'
+        /* Input 组件, 负责回传value值 */
+        function Input({ onChange, value }) {
+            return <input className="input" onChange={(e) => (onChange && onChange(e.target.value))} value={value} />
+        }
+        /* 给Component 增加标签 */
+        Input.displayName = 'input'
+
+        class App extends React.Component {
+            render() {
+
+                return <div>
+                    ··
+                </div>
+            }
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('example')
+        );
+    </script>
+
+</body>
+
+</html>
