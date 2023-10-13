@@ -178,3 +178,5 @@ function resolvePromise(promiseOther, x, resolve, reject) {
 
 // module.exports = PrmoiseA
 export default PrmoiseA
+
+
