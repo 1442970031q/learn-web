@@ -123,4 +123,27 @@ interface Inter2 extends Inter1 {
     age: string;
     sayAge: () => void;
 }
-// 类型守卫
+// 类型守卫 作用缩小类型推断的范围
+
+// typeof 能够判断出 string number boolean undefined bigint symbol  object function 
+// typeof calss 为function
+// typeof 对于 new Class, array, Set ,Map  判断为 object
+
+// in 判断出对象的属性和方法
+
+// instanceof 例如 变量A instanceof 函数||对象||类  变量A原型链中有没有 原型链中的对象 ===函数||对象||类的prototype  
+
+let val: unknown
+val = 124
+val = 124
+
+// 抽象类 装饰器
+abstract class Utils {
+    abstract getName: () => void;
+    getAge(){}
+}
+
+// 自定义类型守卫
+function isString<T>(val: any): val is T {
+    return typeof val === 'string'
+}
