@@ -1,4 +1,4 @@
-enum DatePick{
+enum DatePick {
     day,
     one,
     seven,
@@ -65,5 +65,15 @@ const p4 = new Peoples({ "name": '章三', age: 12 })
 type PeopleKeyof = keyof typeof DatePick
 const p5: PeopleKeyof = 'day'
 
+// infer 使用在 extends后
+type ParametersTwo<T extends (...agrs: any[]) => any> = T extends (...agrs: infer P) => any ? P : never
+type ReturnTypeTwo<T> = T extends (...args: any[]) => infer P ? P : never
+// 构造函数类型表示方法 
+const p6: new (...args: any[]) => any = Peoples  // 构造函数类型表示方法1
+const p7: typeof Peoples = Peoples // 构造函数类型表示方法2
 
+const p8 = new p6({ "name": '章三', age: 12 })
 
+type Func<T> = new (...ages: any[]) => T  // 构造函数类型表示方法3
+const p9: Func<Peoples> = Peoples
+const p10 = new p9({ "name": '章三', age: 12 });
