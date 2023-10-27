@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>响应式布局</title>
+</head>
+<style>
+    /* 
+    1. 媒体查询 
+    语法：
+    @media screen (min-device-width:100px and max-device-width:200px)
+    screen 表示屏幕
+    常用的属性
+        min-width 浏览器最小宽度
+        max-width 浏览器最大宽度
+        min-device-width: 设备最小宽度 常用移动端
+        max-device-widht: 设备最大宽度 常用移动端
+    标签中的展示： 
+    <style media="(min-width:100px and max-width:200px)">
+    <link media="(min-width:100px and max-width:200px)"/>
+    */
+    /* 
+    2. rem 方案
+    rem 和 em不同 em以父元素字体大小为单位
+    假如以320为屏幕宽度 设置跟元素的字体为10px 1rem=10px 以320为设计搞基准
+    const width = document.clictwidth
+    const fontSize= 10*(width/320)
+    */
+    /* 
+    3. 自适应方案
+    切换页面形式
+        if（UA==='iphone || arond'）{
+            mobel.html
+        }else{
+            pc.html
+        }
+    让中间内容填充
+        */
+    /* 
+    4. 响应式方案
+    通过 link 标签 <link mdeia="(min-device-width:100 and max-device-width:300)" /> 
+     */
+    /* 
+    flex 布局
+        容器相关属性
+        flex-dirction: rows colnum rows-resolve colnum-resolve
+        flex-warp: warp no-warp nomal
+        justify-items: flex-satrt flex-end center space-bettwn space-arrowd
+        align-items: flex-sart flex-end center baselin(沿着首行文字对齐) stretch（自元素没有设置高度 进行填充） 
+        align-content:  flex-sart flex-end center space-bettwn space-arrowd stretch(默认占满整个轴线) （多个轴线时候设置整体）
+        容器项相关属性
+        flex-basis: 设置相关宽度  px 百分比 rem 通过nth-child()选择每一个 设置完之后对应的宽高失效
+        flex-grow: 设置剩余空间占比
+        flex-shrink: 设置是否允许缩放 和缩放比
+        flex: flex-grow flex-shrink flex-basis
+        flex: auto =flex: 1 1 auto
+        flex: none=flex: 0 0 auto
+    */
+    .main {
+        width: 800px;
+        height: 800px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .main div {
+        height: 100px;
+        width: 100px;
+    }
+
+    .main div:nth-child(3) {
+        flex-basis: 200px;
+        flex-grow: 1;
+    }
+
+    .main div:nth-child(4) {
+        flex-grow: 1;
+    }
+</style>
+
+<body>
+    <div class="main">
+        <div class="item" style="background:red;font-size: 12px;">1</div>
+        <div class="item" style="background:blue;font-size: 18px;">2</div>
+        <div class="item" style="background:green;font-size: 12px;">3</div>
+        <div class="item" style="background:darkorange;font-size: 24px;">4</div>
+        <div class="item" style="background:black;font-size: 28px;">5</div>
+    </div>
+</body>
+
+</html>
