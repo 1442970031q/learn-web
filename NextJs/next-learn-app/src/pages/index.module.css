@@ -1,4 +1,8 @@
 .main {
     height: 100vh;
     width: 100vw;
+    display: flex;
+    justify-content: center;
+    background: #b3e0ec;
+    overflow-y: auto;
 }

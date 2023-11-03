@@ -1,10 +1,10 @@
 .product {
-    width: 500px;
+    width: 800px;
     padding: 24px;
     border-radius: 5px;
     background: #fff;
-
-}
+    margin-bottom: 16px;
+}   
 
 .productTitle {
     font-size: 16px;
@@ -38,15 +38,16 @@
 .productDetail {
     font-size: 14px;
     color: #353434;
-    padding: 16px;
+    height: 52px;
     cursor: pointer;
     border-radius: 5px;
+    line-height: 52px;
     text-align: center;
 }
 
 .productDetail:hover {
     background: rgb(39, 147, 242);
-    color: whiteF;
+    color: white;
     font-weight: 500;
     font-size: 16px;
 }

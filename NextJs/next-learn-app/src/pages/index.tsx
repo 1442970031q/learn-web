@@ -7,7 +7,9 @@ export default function Home(props: { productList?: any[] }) {
   const { productList } = props
 
   return <div className={styles.main}>
-    {productList?.map((v, i) => <Product key={i} {...v} />)}
+    <div>
+      {productList?.map((v, i) => <Product key={i} {...v} />)}
+    </div>
   </div>
 }
 

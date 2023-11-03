@@ -7,9 +7,9 @@ export default function Product(props) {
     const router = useRouter()
     const clickHandle = () => {
         router.push({
-            pathname: '/product/[id]',
+            pathname: '/details/[productId]',
             query: {
-                id
+                productId:id
             }
         })
     }
