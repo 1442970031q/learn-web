@@ -1,0 +1,13 @@
+.notPage {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notPageContent {
+    background: rgb(0, 162, 255);
+    color: white;
+    font-size: 20px;
+}

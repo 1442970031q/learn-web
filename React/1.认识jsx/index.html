@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>认识jsx</title>
+    <!-- React -->
+    <script src="https://unpkg.com/react@latest/umd/react.development.js"></script>
+    <!-- ReactDOM -->
+    <script src="https://unpkg.com/react-dom@latest/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- PropTypes 限制参数类型-->
+    <script src="https://unpkg.com/prop-types@latest/prop-types.js"></script>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div id="example"></div>
+    <script type="text/babel">
+        const toLearn = ['vue', 'react', 'webpack', 'html']
+        const TextCompontent = () => <div>我是一个组件</div>
+        /**
+         * jsx 类型                         react.creatElement转换后                    type属性
+         * element元素类型                   react element类型                           标签的字符串 如div
+         * fragment类型                     react fragment类型                          symbol react.symbol类型
+         * 文本字符串                        直接字符串                                             无 
+         * 数组类型                          数组类型 返回 react.createElement              无
+         * 三元运算符                         先执行三元运算符再执行上述流程                    无
+         * 函数类型                            先执行函数再按照上述执行                         无
+        */
+
+        /**
+         * fiber 类型和 react element联系
+         * export const FunctionComponent = 0;       // 函数组件
+            export const ClassComponent = 1;          // 类组件
+            export const IndeterminateComponent = 2;  // 初始化的时候不知道是函数组件还是类组件 
+            export const HostRoot = 3;                // Root Fiber 可以理解为根元素 ， 通过reactDom.render()产生的根元素
+            export const HostPortal = 4;              // 对应  ReactDOM.createPortal 产生的 Portal 
+            export const HostComponent = 5;           // dom 元素 比如 <div>
+            export const HostText = 6;                // 文本节点
+            export const Fragment = 7;                // 对应 <React.Fragment> 
+            export const Mode = 8;                    // 对应 <React.StrictMode>   
+            export const ContextConsumer = 9;         // 对应 <Context.Consumer>
+            export const ContextProvider = 10;        // 对应 <Context.Provider>
+            export const ForwardRef = 11;             // 对应 React.ForwardRef
+            export const Profiler = 12;               // 对应 <Profiler/ >
+            export const SuspenseComponent = 13;      // 对应 <Suspense>
+            export const MemoComponent = 14;          // 对应 React.memo 返回的组件
+         * 
+        */
+        class App extends React.Component {
+            state = false
+            renderFoot = () => <div>我是foot 组件</div>
+            // 创建
+            constructor() {
+                super()
+                console.log('constructor 1')
+            }
+            // 创建
+            componentDidMount() {
+                console.log('compontentDidMount 4')
+            }
+
+            // 更新
+            // shouldComponentUpdate() {
+            //     console.log("shouldComponentUpdate")
+            // }
+
+            // 更新
+            // getSnapshotBeforeUpdate() {
+            //     console.log("getSnapshotBeforeUpdate")
+            // }
+
+            // 更新
+            componentDidUpdate() {
+                console.log("componentDidUpdate")
+            }
+
+            // 卸载
+            componentWillUnmount() {
+                console.log("componentWillUnmount")
+            }
+            handleClick = () => {
+            }
+            renderNewJSX = () => {
+                const jsx = <div>
+                    {/**基本元素类型*/}
+                    <div>基本元素类型</div>
+                    {/**Fragment*/}
+                    <React.Fragment>
+                        <div> 👽👽 </div>
+                    </React.Fragment>
+                    {/**文本类型*/}
+                    我是文本类型
+                    {/**数组类型*/}
+                    {toLearn.map((v, i) => <div key={i}>{v}</div>)}
+                    {/**组件类型*/}
+                    <TextCompontent />
+                    {/**函数类型 */}
+                    {this.renderFoot()}
+                    {/**三元运算符*/}
+                    {this.state ? <TextCompontent /> : <div>三元运算符</div>}
+                    <button onClick={() => this.setState(v => !v)}>切换state</button>
+                </div>
+                const { children
+                } = jsx.props
+                const jsxArr = React.Children.toArray(children);//扁平化数组
+                const newJSX=[]
+                React.Children.forEach(jsxArr,(item)=>{
+                    if (React.isValidElement(item)) {
+                        newJSX.push(item)
+                    }
+                })
+                console.log('老的',children)
+                console.log('新的',newJSX)
+                const newReactNode=React.createElement('div',{className:"last"},'say good')
+                newJSX.push(newReactNode)
+                return React.cloneElement(jsx,{},newJSX)
+            }
+            // 创建 更新
+            render() {
+                //常见的jsx元素
+                return this.renderNewJSX()
+            }
+        }
+        /**
+         * 最终jsx形成的 fiber图如下
+         * 
+         *
+         
+         fiber 对应关系
+            child： 一个由父级 fiber 指向子级 fiber 的指针。
+            return：一个子级 fiber 指向父级 fiber 的指针。
+            sibling: 一个 fiber 指向下一个兄弟 fiber 的指针。
+        */
+        ReactDOM.render(
+            <App />,
+            document.getElementById('example')
+        );
+    </script>
+
+</body>
+
+</html>
