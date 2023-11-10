@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Image from 'next/image'
 import { getAllData } from '@/utils/request'
 import styles from './index.module.css'
 import Product from '@/compontents/Product'

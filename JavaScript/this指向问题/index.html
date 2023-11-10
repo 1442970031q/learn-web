@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>this 指向问题</title>
+</head>
+
+<body>
+    <script>
+        const obj = {
+            name: '张三',
+            sayName() {
+                console.log("sayName", this);
+                function sayName1() {
+                    console.log("sayName1", this)
+                }
+                sayName1();
+                (function(){
+                    console.log("sayName2", this)
+                })()
+                const that=this
+                return function (){
+                    console.log("sayName3",this)
+                    console.log("sayName4",that)
+                }
+            }
+        }
+        obj.sayName()()
+    </script>
+</body>
+
+</html>

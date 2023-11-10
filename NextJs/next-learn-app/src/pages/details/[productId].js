@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import styles from './product-detail.module.css'
 import { getAllData, getProductById } from '@/utils/request'
+import Head from 'next/head'
 
 export default function ProductDetail(props) {
     if (!props || Object.keys(props).length === 0) {
@@ -8,6 +9,10 @@ export default function ProductDetail(props) {
     }
     const { title, price, date, desc, id } = props
     return <div className={styles.productDetail}>
+        <Head>
+            <title>{title}</title>
+            <meta name={title} />
+        </Head>
         <div className={styles.productDetailContent}>
             <h3>{title}
                 <b>id:{id}</b>
